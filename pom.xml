@@ -6,12 +6,13 @@
     <version>1.2.6</version>
   </parent>
   <artifactId>onebusaway-gtfs-realtime-api</artifactId>
-  <version>1.2.27-SNAPSHOT</version>
+  <version>${project-version}</version>
   <name>onebusaway-gtfs-realtime-api</name>
   <description>Java classes for OBA-specific extensions to the GTFS-realtime protocol buffer specification.</description>
   <url>https://github.com/OneBusAway/onebusaway-gtfs-realtime-api/wiki/</url>
 
   <properties>
+    <project-version>1.2.28</project-version>
     <protobuf.version>3.12.4</protobuf.version>
   </properties>
 
@@ -68,6 +69,11 @@
       <id>${site_id}</id>
       <url>${site_url}</url>
     </site>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/nautilustechnologyau</url>
+    </repository>
   </distributionManagement>
 
   <build>
