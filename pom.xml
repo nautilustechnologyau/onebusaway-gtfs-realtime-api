@@ -68,6 +68,11 @@
       <id>${site_id}</id>
       <url>${site_url}</url>
     </site>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/nautilustechnologyau</url>
+    </repository>
   </distributionManagement>
 
   <build>
