@@ -85,6 +85,6 @@ jobs:
 
       - name: Publish package
         if: github.ref == 'refs/heads/mymetro'
-        run: mvn --batch-mode deploy
+        run: mvn deploy -Ptravis -Dmaven.javadoc.skip=true -Dvalidate.silent=true -Dlog4j.configuration= -B -V -q
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
