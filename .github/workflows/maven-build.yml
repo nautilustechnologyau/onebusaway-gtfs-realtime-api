@@ -1,0 +1,90 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Tools
+        run: sudo apt-get install xmlstarlet
+
+      - name: Get Project Version and Branch
+        run: |
+          echo "GIT_BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "PROJECT_VERSION=$(xmlstarlet sel -t -m _:project -m _:properties -v _:project-version pom.xml)" >> $GITHUB_ENV
+
+      - name: Get Tag with Project Version
+        run: |
+          git fetch --all --tags
+          echo "TAG_VERSION=$(git tag -l $PROJECT_VERSION)" >> $GITHUB_ENV
+
+      - name: Version Check
+        run: |
+          if [[ "${{ env.TAG_VERSION }}" == "${{ env.PROJECT_VERSION }}" ]]; then
+            echo "There is a tag with ${{ env.PROJECT_VERSION }} already exists! Please update the project version in pom.xml."
+            exit 1
+          fi
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          server-id: github
+          tings-path: ${{ github.WORKSPACE }}
+          java-version: 11
+          distribution: temurin
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Create Tag
+        if: github.ref == 'refs/heads/mymetro'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { PROJECT_VERSION } = process.env
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${PROJECT_VERSION}`,
+              sha: context.sha
+            })
+
+      - name: Create release
+        if: github.ref == 'refs/heads/mymetro'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { PROJECT_VERSION } = process.env
+            try {
+              await github.rest.repos.createRelease({
+                draft: false,
+                generate_release_notes: true,
+                name: `v${PROJECT_VERSION}`,
+                owner: context.repo.owner,
+                prerelease: false,
+                repo: context.repo.repo,
+                tag_name: `${PROJECT_VERSION}`,
+              });
+            } catch (error) {
+              core.setFailed(error.message);
+            }
+
+      - name: Publish package
+        if: github.ref == 'refs/heads/mymetro'
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
