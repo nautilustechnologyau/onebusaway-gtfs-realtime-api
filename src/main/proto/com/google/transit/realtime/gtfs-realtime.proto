@@ -242,17 +242,17 @@ message TripUpdate {
     optional ScheduleRelationship schedule_relationship = 5
         [default = SCHEDULED];
 
-    // enum OccupancyStatus {
-    //   EMPTY = 0;
-    //   MANY_SEATS_AVAILABLE = 1;
-    //   FEW_SEATS_AVAILABLE = 2;
-    //   STANDING_ROOM_ONLY = 3;
-    //   CRUSHED_STANDING_ROOM_ONLY = 4;
-    //   FULL = 5;
-    //   NOT_ACCEPTING_PASSENGERS = 6;
-    // }
+    enum OccupancyStatus {
+      EMPTY = 0;
+      MANY_SEATS_AVAILABLE = 1;
+      FEW_SEATS_AVAILABLE = 2;
+      STANDING_ROOM_ONLY = 3;
+      CRUSHED_STANDING_ROOM_ONLY = 4;
+      FULL = 5;
+      NOT_ACCEPTING_PASSENGERS = 6;
+    }
 
-    // optional OccupancyStatus departure_occupancy_status = 6;
+    optional OccupancyStatus departure_occupancy_status = 6;
 
     // The extensions namespace allows 3rd-party developers to extend the
     // GTFS Realtime Specification in order to add and evaluate new features

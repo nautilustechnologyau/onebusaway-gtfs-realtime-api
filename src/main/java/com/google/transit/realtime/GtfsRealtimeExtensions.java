@@ -59,7 +59,7 @@ public class GtfsRealtimeExtensions {
     GtfsRealtimeMTARR.registerAllExtensions(registry);
     GtfsRealtimeServiceStatus.registerAllExtensions(registry);
     GtfsRealtimeCrowding.registerAllExtensions(registry);
-    // GtfsRealtimeNSW.registerAllExtensions(registry);
+    GtfsRealtimeNSW.registerAllExtensions(registry);
     // GtfsRealtimeAdelaideMetro.registerAllExtensions(registry);
   }
 
