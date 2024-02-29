@@ -50,13 +50,13 @@ jobs:
         run: mvn clean package -Ptravis -Dmaven.javadoc.skip=true -Dvalidate.silent=true -Dlog4j.configuration= -B -V -q
 
       - name: Publish package
-        if: github.ref == 'refs/heads/mymetro'
+        if: github.ref == 'refs/heads/mymetro-sa'
         run: mvn deploy -Ptravis -Dmaven.javadoc.skip=true -D"license.skip" -Dvalidate.silent=true -Dlog4j.configuration= -B -V -q
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Tag
-        if: github.ref == 'refs/heads/mymetro'
+        if: github.ref == 'refs/heads/mymetro-sa'
         uses: actions/github-script@v6
         with:
           script: |
@@ -69,7 +69,7 @@ jobs:
             })
 
       - name: Create release
-        if: github.ref == 'refs/heads/mymetro'
+        if: github.ref == 'refs/heads/mymetro-sa'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
